@@ -2,17 +2,14 @@
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <p>Count: {{ myStore.count }}</p>
+    <button @click="myStore.increment">Increment</button>
   </div>
 </template>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+<script lang="ts" setup>
 import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import { store } from '@/stores/store';
 
-@Options({
-  components: {
-    HelloWorld,
-  },
-})
-export default class HomeView extends Vue {}
+const myStore = store()
 </script>
