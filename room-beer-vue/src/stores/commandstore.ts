@@ -21,17 +21,31 @@ export const commandstore = defineStore('commandstore', {
                 console.log("Failed: " + error)
             }
         },
+        // DRIVE
         async driveForwards() {
-            await this.postRequest('post/drive/forwards') // Only the path
+            await this.postRequest('post/drive/forwards')
         },
         async driveBackwards() {
-            await this.postRequest('post/drive/backwards') // Only the path
+            await this.postRequest('post/drive/backwards')
         },
         async driveTurnLeft() {
-            await this.postRequest('post/drive/turnleft') // Only the path
+            await this.postRequest('post/drive/turnleft')
         },
         async driveTurnRight() {
-            await this.postRequest('post/drive/turnright') // Only the path
+            await this.postRequest('post/drive/turnright')
+        },
+        // STOP
+        async stopForwards() {
+            await this.postRequest('post/stop/forwards')
+        },
+        async stopBackwards() {
+            await this.postRequest('post/stop/backwards')
+        },
+        async stopTurnLeft() {
+            await this.postRequest('post/stop/turnleft')
+        },
+        async stopTurnRight() {
+            await this.postRequest('post/stop/turnright')
         },
     },
 });

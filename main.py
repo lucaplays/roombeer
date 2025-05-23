@@ -49,3 +49,21 @@ def post_drive_turnleft():
 @app.post("/post/drive/turnright")
 def post_drive_turnright():
     return {"req": "drive_turnright",}
+
+#STOP REQUESTS
+
+@app.post("/post/stop/forwards")
+def post_stop_forwards():
+    return {"req": "stop_forwards"}
+
+@app.post("/post/stop/backwards")
+def post_stop_backwards():
+    return {"req": "stop_backwards",}
+
+@app.post("/post/stop/turnleft")
+def post_stop_turnleft():
+    return {"req": "stop_turnleft",}
+
+@app.post("/post/stop/turnright")
+def post_stop_turnright():
+    return {"req": "stop_turnright",}
