@@ -14,11 +14,14 @@
 # RoomBeerFrontend
 Dont open Frontend inside!      
 
-# Update src
+# Raspberry setup
+
+## Update source
+cd ~/roombeer
 git pull origin main
 
-# System service installation
-cd scripts
+## System service installation
+cd ~/roombeer/scripts
 sudo ./install.sh
 
 ## Restart frontend
