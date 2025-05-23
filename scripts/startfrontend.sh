@@ -8,5 +8,5 @@ done
 
 cd ../room-beer-vue/
 npm install
-echo "Running on $IP"
-VUE_APP_IP=$IP npm run serve
+VUE_APP_IP=$IP npm run build
+npx http-serve dist/
