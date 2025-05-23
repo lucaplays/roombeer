@@ -1,25 +1,12 @@
 <template>
   <div>
-    <button @click="sendCommand">Send Command</button>
+    <button @click="cmdStore.postRequest('tmp')">Send Command</button>
   </div>
 </template>
 
 <script lang="ts" setup>
-import axios from 'axios';
+import { commandstore } from '@/stores/commandstore';
 
-const sendCommand = async () => {
-  const command = {
-    action: 'some_action',
-    data: {
-      key: 'value'
-    }
-  };
+var cmdStore = commandstore()
 
-  try {
-    const response = await axios.post('http://localhost:8000/execute-command/', command);
-    console.log(response.data);
-  } catch (error) {
-    console.error('Error sending command:', error);
-  }
-};
 </script>
