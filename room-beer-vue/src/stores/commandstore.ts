@@ -13,7 +13,7 @@ export const commandstore = defineStore('commandstore', {
                     method: "POST"
                 })
                 if (result.ok) {
-                    //ok
+                    // Handle success
                 } else {
                     console.log(result.status + " " + result.statusText)
                 }
@@ -22,16 +22,16 @@ export const commandstore = defineStore('commandstore', {
             }
         },
         async driveForwards() {
-            await this.postRequest('http://127.0.0.1:8000/post/drive/forwards/')
+            await this.postRequest('post/drive/forwards') // Only the path
         },
         async driveBackwards() {
-            await this.postRequest('http://127.0.0.1:8000/post/drive/backwards/')
+            await this.postRequest('post/drive/backwards') // Only the path
         },
         async driveTurnLeft() {
-            await this.postRequest('http://127.0.0.1:8000/post/drive/turnleft/')
+            await this.postRequest('post/drive/turnleft') // Only the path
         },
         async driveTurnRight() {
-            await this.postRequest('http://127.0.0.1:8000/post/drive/turnright/')
+            await this.postRequest('post/drive/turnright') // Only the path
         },
     },
 });
