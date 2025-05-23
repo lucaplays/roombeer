@@ -25,19 +25,27 @@ class Item(BaseModel):
 def read_root():
     return {"Hello": "World"}
 
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
-
-
-@app.put("/items/{item_id}")
-def update_item(item_id: int, item: Item):
-    return {"item_name": item.name, "item_id": item_id}
-
 class RequestItem(BaseModel):
     name: str
 
 @app.post("/post/")
 def post_request(req: RequestItem):
     return {"req": req.name,}
+
+#DRIVE REQUESTS
+    
+@app.post("/post/drive/forwards")
+def post_drive_forwards():
+    return {"req": "drive_forwards"}
+
+@app.post("/post/drive/backwards")
+def post_drive_backwards():
+    return {"req": "drive_backwards",}
+
+@app.post("/post/drive/turnleft")
+def post_drive_turnleft():
+    return {"req": "drive_turnleft",}
+
+@app.post("/post/drive/turnright")
+def post_drive_turnright():
+    return {"req": "drive_turnright",}

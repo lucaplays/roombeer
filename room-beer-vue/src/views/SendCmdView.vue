@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button @click="cmdStore.postRequest('tmp')">Send Command</button>
+    <button @click="cmdStore.driveForwards">Send Command</button>
   </div>
 </template>
 
