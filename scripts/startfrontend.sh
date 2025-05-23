@@ -9,4 +9,4 @@ done
 cd ../room-beer-vue/
 npm install
 VUE_APP_IP=$IP npm run build
-npx http-serve dist/
+npx http-serve dist/ -p 8080
