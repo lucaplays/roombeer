@@ -1,6 +1,6 @@
 [Unit]
 Description=Roombeer Frontend Service
-After=multi-user.target
+After=network.target
 
 [Service]
 ExecStart=/home/ubuntu/roombeer/scripts/startfrontend.sh
