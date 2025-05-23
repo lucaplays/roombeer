@@ -1,19 +1,24 @@
 <template>
-  <videoFrame />
+
   <div class="radial-buttons">
-    <button id="topBtn" :class="{active: inputPressed[0]}" @mousedown="(evt)=> handleInput(evt, Direction.FORWARD)" @mouseup="(evt)=> handleInput(evt, Direction.FORWARD)" class="button top">
+    <button id="topBtn" :class="{ active: inputPressed[0] }" @mousedown="(evt) => handleInput(evt, Direction.FORWARD)"
+      @mouseup="(evt) => handleInput(evt, Direction.FORWARD)" class="button top">
       {{ "^" }}
     </button>
-    <button id="rightBtn" :class="{active: inputPressed[1]}" @mousedown="(evt)=> handleInput(evt, Direction.RIGHT)" @mouseup="(evt)=> handleInput(evt, Direction.RIGHT)" class="button right">
+    <button id="rightBtn" :class="{ active: inputPressed[1] }" @mousedown="(evt) => handleInput(evt, Direction.RIGHT)"
+      @mouseup="(evt) => handleInput(evt, Direction.RIGHT)" class="button right">
       {{ ">" }}
     </button>
-    <button id="downBtn" :class="{active: inputPressed[2]}" @mousedown="(evt)=> handleInput(evt, Direction.BACK)" @mouseup="(evt)=> handleInput(evt, Direction.BACK)" class="button bottom">
-    {{ "v" }}
+    <button id="downBtn" :class="{ active: inputPressed[2] }" @mousedown="(evt) => handleInput(evt, Direction.BACK)"
+      @mouseup="(evt) => handleInput(evt, Direction.BACK)" class="button bottom">
+      {{ "v" }}
     </button>
-    <button id="leftBtn" :class="{active: inputPressed[3]}" @mousedown="(evt)=> handleInput(evt, Direction.LEFT)" @mouseup="(evt)=> handleInput(evt, Direction.LEFT)" class="button left">
-      {{ "<" }}
-    </button>
+    <button id="leftBtn" :class="{ active: inputPressed[3] }" @mousedown="(evt) => handleInput(evt, Direction.LEFT)"
+      @mouseup="(evt) => handleInput(evt, Direction.LEFT)" class="button left">
+      {{ "<" }} </button>
   </div>
+
+  <videoFrame />
 </template>
 
 <script lang="ts" setup>
@@ -28,8 +33,8 @@ const cmdStore = commandstore();
 function handleInput(event: KeyboardEvent | MouseEvent, direction: Direction = Direction.NONE) {
   const isDown = event.type.includes('down');
 
-  if(event instanceof KeyboardEvent) {
-    switch(event.key) {
+  if (event instanceof KeyboardEvent) {
+    switch (event.key) {
       case 'w':
         direction = Direction.FORWARD;
         break;
@@ -46,11 +51,11 @@ function handleInput(event: KeyboardEvent | MouseEvent, direction: Direction = D
   }
 
 
-  if (direction === Direction.NONE){
+  if (direction === Direction.NONE) {
     return
   }
 
-  if(isDown && inputPressed.value[direction - 1]){
+  if (isDown && inputPressed.value[direction - 1]) {
     return;
   }
 
@@ -75,32 +80,41 @@ onUnmounted(() => {
 
 <style scoped>
 .radial-buttons {
-  position: relative;
-  width: 200px;
-  /* Adjust size as needed */
-  height: 200px;
-  /* Adjust size as needed */
-  margin: auto;
+  z-index: 2;
+  position: fixed;
+  width: 150px;
+  height: 150px;
+  bottom: 5%;
+  right: 5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .button {
   position: absolute;
   width: 50px;
-  /* Adjust button size as needed */
   height: 50px;
-  /* Adjust button size as needed */
   border: none;
   border-radius: 50%;
-  background-color: #007bff;
-  /* Button color */
+  background-color: #007bff87;
   color: white;
   font-size: 20px;
   cursor: pointer;
 }
 
-.button.active {
-  background-color: rgb(135, 190, 249);
+.button:hover {
+  background-color: #2d91fc87;
 }
+
+.button:active {
+  background-color: #09325e87;
+}
+
+.button:not(:active) {
+  background-color: #007bff87;
+}
+
 
 .top {
   top: 0;
