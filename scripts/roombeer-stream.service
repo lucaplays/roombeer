@@ -1,0 +1,14 @@
+[Unit]
+Description=Roombeer Stream Service
+After=network.target
+
+[Service]
+ExecStart=/home/ubuntu/roombeer/scripts/startstream.sh
+WorkingDirectory=/home/ubuntu/roombeer/scripts/
+User=ubuntu
+Group=ubuntu
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
