@@ -17,15 +17,18 @@ class controller:
 
         # self.__push_speed()
 
+    def __push_int16(buffer: list[int], speed: int):
+        buffer.append(speed & 0xFF)
+        buffer.append((speed & 0xFF00) >> 8)
+
     def __push_speed(self):
         buffer: list[int] = []
 
         # header
         buffer.append(0xAA)
 
-        # right motor
-        buffer.append(self.speed_right & 0xFF)
-        buffer.append((self.speed_right & 0xFF00) >> 8)
+        controller.__push_int16(buffer, self.speed_right)
+        controller.__push_int16(buffer, self.speed_left)
 
         # left motor
         buffer.append(self.speed_left & 0xFF)
@@ -33,7 +36,9 @@ class controller:
 
         os.write(self.fd, bytes(buffer))
 
-    def set_motor_speed(self, ste: stepper, speed: float):
+    def set_motor_speed(self, ste: stepper, speed_float: float):
+        speed = int(speed_float * 4000)
+
         if ste == stepper.RIGHT:
             self.speed_right = speed
         else:
@@ -41,3 +46,7 @@ class controller:
 
         self.__push_speed()
 
+
+c = controller("/dev/ttyACM0")
+c.set_motor_speed(stepper.LEFT, -1)
+c.set_motor_speed(stepper.RIGHT, 1)
