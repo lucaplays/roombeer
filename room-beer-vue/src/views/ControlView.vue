@@ -1,68 +1,67 @@
 <template>
   <videoFrame />
   <div class="radial-buttons">
-    <button id="topBtn" @mousedown="cmdStore.driveForwards()" @mouseup="cmdStore.stopForwards()" class="button top">
+    <button id="topBtn" @mousedown="(evt)=> handleInput(evt, Direction.FORWARD)" @mouseup="(evt)=> handleInput(evt, Direction.FORWARD)" class="button top">
       {{ "^" }}
     </button>
-    <button id="leftBtn" @mousedown="cmdStore.driveTurnLeft()" @mouseup="cmdStore.stopTurnLeft()" class="button left">
-      {{ "<" }} </button>
-        <button id="downBtn" @mousedown="cmdStore.driveBackwards()" @mouseup="cmdStore.stopBackwards()"
-          class="button bottom">
-          {{ "v" }}
-        </button>
-        <button id="rightBtn" @mousedown="cmdStore.driveTurnRight()" @mouseup="cmdStore.stopTurnRight()"
-          class="button right">
-          {{ ">" }}
-        </button>
+    <button id="leftBtn" @mousedown="(evt)=> handleInput(evt, Direction.LEFT)" @mouseup="(evt)=> handleInput(evt, Direction.LEFT)" class="button left">
+      {{ "<" }}
+    </button>
+    <button id="downBtn" @mousedown="(evt)=> handleInput(evt, Direction.BACK)" @mouseup="(evt)=> handleInput(evt, Direction.BACK)" class="button bottom">
+      {{ "v" }}
+    </button>
+    <button id="rightBtn" @mousedown="(evt)=> handleInput(evt, Direction.RIGHT)" @mouseup="(evt)=> handleInput(evt, Direction.RIGHT)" class="button right">
+      {{ ">" }}
+    </button>
   </div>
 </template>
 
 <script lang="ts" setup>
 import videoFrame from "@/components/IFrame.vue";
+import { Direction } from "@/constants";
 import { commandstore } from '@/stores/commandstore';
+import { onMounted, onUnmounted } from 'vue';
 
-var cmdStore = commandstore();
+const cmdStore = commandstore();
 const keysPressed: { [key: string]: boolean } = {};
 
-function handleKeyDown(key: string) {
-  switch (key) {
-    case "w":
-      cmdStore.driveForwards()
-      break
-    case "s":
-      cmdStore.driveBackwards()
-      break
-    case "a":
-      cmdStore.driveTurnLeft()
-      break
-    case "d":
-      cmdStore.driveTurnRight()
-      break
-  }
+function handleInput(event: KeyboardEvent | MouseEvent, direction: Direction = Direction.NONE) {
+
+  if(event instanceof KeyboardEvent) {
+    switch(event.key) {
+      case 'w':
+        direction = Direction.FORWARD;
+        break;
+      case 'd':
+        direction = Direction.RIGHT;
+        break;
+      case 's':
+        direction = Direction.BACK;
+        break;
+      case 'a':
+        direction = Direction.RIGHT;
+        break;
+    }}
+  
+  const isDown = event.type.includes('down');
+
+  cmdStore.move(direction, isDown);
 }
 
-function handleKeyUp(key: string) {
-  switch (key) {
-    case "w":
-      cmdStore.stopForwards()
-      break
-    case "s":
-      cmdStore.stopBackwards()
-      break
-    case "a":
-      cmdStore.stopTurnLeft()
-      break
-    case "d":
-      cmdStore.stopTurnRight()
-      break
-  }
-}
+onMounted(() => {
+  window.addEventListener('keydown', handleInput);
+  window.addEventListener('keyup', handleInput);
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleInput);
+  window.removeEventListener('keyup', handleInput);
+})
 
 document.addEventListener('keydown', (event: KeyboardEvent) => {
   const key = event.key.toLowerCase();
   if (['w', 'a', 's', 'd'].includes(key) && !keysPressed[key]) {
     keysPressed[key] = true;
-    handleKeyDown(key);
   }
 });
 
@@ -70,7 +69,6 @@ document.addEventListener('keyup', (event: KeyboardEvent) => {
   const key = event.key.toLowerCase();
   if (['w', 'a', 's', 'd'].includes(key) && keysPressed[key]) {
     keysPressed[key] = false;
-    handleKeyUp(key);
   }
 });
 
