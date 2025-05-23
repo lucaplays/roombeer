@@ -12,4 +12,14 @@
 ```
 
 # RoomBeerFrontend
-Dont open Frontend inside!                                                                  
+Dont open Frontend inside!      
+
+# How To:
+## Run Frontend
+```plaintext
+npm run dev
+```
+## Run Backend
+```plaintext
+fastapi dev ./venv_backend/src/main.py
+```
