@@ -12,15 +12,20 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  margin: 0;
 }
 
 nav {
   padding: 30px;
+  position: fixed;
+  width: 100%;
+  z-index: 1;
 }
 
 nav a {
   font-weight: bold;
-  color: #2c3e50;
+  color: white;
+  background-color: black;
 }
 
 nav a.router-link-exact-active {
