@@ -18,7 +18,8 @@ Dont open Frontend inside!
 # Setup Python Virtual Environment
 ### Inside of ./Roombeer/
 ```plaintext
-python -m venv_backend
+python -m venv venv_backend
+pip install "fastapi[standard]"
 ```
 ## Run Frontend
 ### Inside of ./room-beer-vue
