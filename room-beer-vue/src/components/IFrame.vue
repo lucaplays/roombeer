@@ -1,6 +1,6 @@
 <template>
   <div class="iframe-container">
-    <iframe src="http://127.0.0.1:8000/" title="" frameborder="0"></iframe>
+    <iframe src="http://10.201.128.155:1234/?action=stream" title="camera" frameborder="0"></iframe>
   </div>
 </template>
 
@@ -11,13 +11,10 @@
 <style scoped>
 .iframe-container {
   margin: auto;
-  width: 50%;
-  height: 500px;
-  /* Adjust height as needed */
+  width: 640px;
+  height: 480px;
   border: 1px solid #ccc;
-  /* Optional border */
   overflow: hidden;
-  /* Hide overflow */
 }
 
 iframe {

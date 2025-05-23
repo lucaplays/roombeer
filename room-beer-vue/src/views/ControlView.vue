@@ -1,14 +1,19 @@
 <template>
   <videoFrame />
   <div class="radial-buttons">
-    <button @mousedown="cmdStore.driveForwards()" @mouseup="cmdStore.stopForwards()" class="button top">{{ "^"
-      }}</button>
-    <button @mousedown="cmdStore.driveTurnLeft()" @mouseup="cmdStore.stopTurnLeft()" class="button left">{{ "<"
-        }}</button>
-        <button @mousedown="cmdStore.driveBackwards()" @mouseup="cmdStore.stopBackwards()" class="button bottom">{{ "v"
-        }}</button>
-        <button @mousedown="cmdStore.driveTurnRight()" @mouseup="cmdStore.stopTurnRight()" class="button right">{{ ">"
-        }}</button>
+    <button id="topBtn" @mousedown="cmdStore.driveForwards()" @mouseup="cmdStore.stopForwards()" class="button top">
+      {{ "^" }}
+    </button>
+    <button id="leftBtn" @mousedown="cmdStore.driveTurnLeft()" @mouseup="cmdStore.stopTurnLeft()" class="button left">
+      {{ "<" }} </button>
+        <button id="downBtn" @mousedown="cmdStore.driveBackwards()" @mouseup="cmdStore.stopBackwards()"
+          class="button bottom">
+          {{ "v" }}
+        </button>
+        <button id="rightBtn" @mousedown="cmdStore.driveTurnRight()" @mouseup="cmdStore.stopTurnRight()"
+          class="button right">
+          {{ ">" }}
+        </button>
   </div>
 </template>
 
