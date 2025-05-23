@@ -14,12 +14,18 @@
 # RoomBeerFrontend
 Dont open Frontend inside!      
 
-# How To:
-## Run Frontend
+# Installation and deployment
+# Setup Python Virtual Environment
+### Inside of ./Roombeer/
 ```plaintext
-npm run dev
+python -m venv_backend
+```
+## Run Frontend
+### Inside of ./room-beer-vue
+```plaintext
+npm run serve
 ```
 ## Run Backend
 ```plaintext
-fastapi dev ./venv_backend/src/main.py
+fastapi dev main.py
 ```
