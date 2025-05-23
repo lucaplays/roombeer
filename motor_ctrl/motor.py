@@ -41,7 +41,3 @@ class controller:
 
         self.__push_speed()
 
-
-ctrl = controller("/dev/ttyACM0")
-ctrl.set_motor_speed(stepper.RIGHT, 1000)
-ctrl.set_motor_speed(stepper.LEFT, 200)
