@@ -1,9 +1,7 @@
+import { IP } from '@/constants';
 import { defineStore } from 'pinia';
 
-const ip = process.env.VUE_APP_IP || '127.0.0.1';
-const BASE_URL = "http://" + ip + ":8000/"
-
-console.log("Hallo" + ip)
+const BASE_URL = "http://" + IP + ":8000/"
 
 export const commandstore = defineStore('commandstore', {
     state: () => ({

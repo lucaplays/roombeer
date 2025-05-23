@@ -1,10 +1,13 @@
 <template>
   <div class="iframe-container">
-    <iframe src="http://10.201.128.155:1234/?action=stream" title="camera" frameborder="0"></iframe>
+    <iframe :src="url" title="camera" frameborder="0"></iframe>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { IP } from '@/constants'
+
+const url = "http://" + IP + ":1234/?action=stream"
 
 </script>
 
