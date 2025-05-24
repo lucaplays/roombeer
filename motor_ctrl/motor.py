@@ -1,10 +1,18 @@
 import os
 from enum import Enum
+from time import sleep
 
 
 class stepper(Enum):
     RIGHT = 0
     LEFT = 1
+
+
+class sonic_sensor_pos(Enum):
+    FRONT = 0
+    LEFT = 1
+    BACK = 2
+    RIGHT = 3
 
 
 class controller:
@@ -14,12 +22,21 @@ class controller:
         self.fd = os.open(device, os.O_RDWR)
         self.speed_left = 0
         self.speed_right = 0
+        self.sonic_sensors: dict[sonic_sensor_pos, int] = {}
 
-        # self.__push_speed()
+        self.__push_speed()
 
     def __push_int16(buffer: list[int], speed: int):
         buffer.append(speed & 0xFF)
         buffer.append((speed & 0xFF00) >> 8)
+
+    def __pull_int16(buffer: list[int]) -> int:
+        value = 0
+
+        value = buffer[0]
+        value |= buffer[1] << 8
+
+        return value
 
     def __push_speed(self):
         buffer: list[int] = []
@@ -36,6 +53,16 @@ class controller:
 
         os.write(self.fd, bytes(buffer))
 
+    def handle_rx(self):
+        buffer = os.read(self.fd, 10)
+
+        if buffer[0] != 0xAA:
+            return
+
+        value_cnt = buffer[1]
+        for i in range(value_cnt):
+            self.sonic_sensors[i] = controller.__pull_int16([buffer[2 + i * 2], buffer[2 + i * 2 + 1]])
+
     def set_motor_speed(self, ste: stepper, speed_float: float):
         speed = int(speed_float * 4000)
 
@@ -50,3 +77,7 @@ class controller:
 # c = controller("/dev/ttyACM0")
 # c.set_motor_speed(stepper.LEFT, -1)
 # c.set_motor_speed(stepper.RIGHT, 1)
+# while True:
+#     c.handle_rx()
+#     print(c.sonic_sensors)
+#     sleep(0.01)

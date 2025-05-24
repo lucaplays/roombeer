@@ -1,8 +1,10 @@
+import asyncio
+
 from typing import Union
 from enum import Enum
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
-from motor_ctrl.motor import controller, stepper
+from motor_ctrl.motor import controller, stepper, sonic_sensor_pos
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -30,17 +32,57 @@ class Item(BaseModel):
     price: float
     is_offer: Union[bool, None] = None
 
+
+async def main():
+    while True:
+        ctrler.handle_rx()
+        await asyncio.sleep(0.01)
+
+
+@app.on_event("startup")
+async def startup_event():
+    asyncio.create_task(main())
+
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
 
-class sonicDistanceItem(BaseModel):
+
+class sonicDistanceItem:
     direction: Direction
     distance: int
 
+    def __init__(self, direction: Direction, distance: int):
+        self.direction = direction
+        self.distance = distance
+
+    def toMap(self):
+        return {
+            "direction": self.direction,
+            "distance": self.distance,
+        }
+
+
 @app.get("/sonicdistance/")
-def sonic_distance(sonic_distance_item: sonicDistanceItem):
-    return {"res": sonic_distance_item}
+def sonic_distance():
+    return {
+        "res": [
+            sonicDistanceItem(
+                direction=Direction.FORWARD, distance=ctrler.sonic_sensors[sonic_sensor_pos.FRONT.value]
+            ).toMap(),
+            sonicDistanceItem(
+                direction=Direction.RIGHT, distance=ctrler.sonic_sensors[sonic_sensor_pos.RIGHT.value]
+            ).toMap(),
+            sonicDistanceItem(
+                direction=Direction.BACK, distance=ctrler.sonic_sensors[sonic_sensor_pos.BACK.value]
+            ).toMap(),
+            sonicDistanceItem(
+                direction=Direction.LEFT, distance=ctrler.sonic_sensors[sonic_sensor_pos.LEFT.value]
+            ).toMap(),
+        ]
+    }
+
 
 class MoveItem(BaseModel):
     direction: Direction
@@ -50,7 +92,7 @@ class MoveItem(BaseModel):
 @app.post("/move/")
 def move(move_item: MoveItem):
     on_off = int(move_item.is_down) * 0.1;
-    
+
     match move_item.direction:
         case Direction.FORWARD:
             ctrler.set_motor_speed(stepper.LEFT, on_off)
@@ -62,5 +104,5 @@ def move(move_item: MoveItem):
             ctrler.set_motor_speed(stepper.RIGHT, -on_off)
         case Direction.LEFT:
             ctrler.set_motor_speed(stepper.RIGHT, on_off)
-            
+
     return {"req": "moved", "parsed": move_item}
