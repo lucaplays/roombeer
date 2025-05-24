@@ -11,13 +11,12 @@
 
 <script setup>
 import { commandstore } from '@/stores/commandstore';
-import { ref } from 'vue';
 
 var cmdStore = commandstore();
 // Labels for the columns
 const labels = ['Front', 'Back', 'Left', 'Right'];
 // Distances for each column (0 to 1)
-var distances = ref([1.0, 0.0, 0.5, 0.9]); // Example distances
+var distances = [1.0, 0.0, 0.0, 0.0]; // Example distances
 
 async function updateDistanceValues() {
     await cmdStore.getDistances().then((data) => {
