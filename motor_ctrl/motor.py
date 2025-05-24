@@ -1,4 +1,5 @@
 import os
+import serial
 from enum import Enum
 from time import sleep
 
@@ -19,7 +20,7 @@ class controller:
 
     def __init__(self, device: str):
         self.device = device
-        self.fd = os.open(device, os.O_RDWR)
+        self.serial = serial.Serial(device)
         self.speed_left = 0
         self.speed_right = 0
         self.sonic_sensors: dict[sonic_sensor_pos, int] = {}
@@ -47,7 +48,19 @@ class controller:
         controller.__push_int16(buffer, self.speed_right)
         controller.__push_int16(buffer, self.speed_left)
 
-        os.write(self.fd, bytes(buffer))
+        buffer.append(0x0A)
+        self.serial.write(bytes(buffer))
+        self.serial.flush()
+
+    def handle_rx(self):
+        buffer = self.serial.read(12)
+
+        if buffer[0] != 0xAA:
+            return
+
+        value_cnt = buffer[1]
+        for i in range(value_cnt):
+            self.sonic_sensors[i] = controller.__pull_int16([buffer[2 + i * 2], buffer[2 + i * 2 + 1]])
 
     def set_motor_speed(self, left_speed_float: float, right_speed_float: float):
         self.speed_left = int(left_speed_float * 1600)
