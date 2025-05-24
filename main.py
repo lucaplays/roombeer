@@ -6,7 +6,7 @@ from motor_ctrl.motor import controller, stepper
 
 from fastapi.middleware.cors import CORSMiddleware
 
-stepper = controller(device="/dev/ttyACM0")
+ctrler = controller(device="/dev/ttyACM0")
 
 class Direction(int, Enum):
     FORWARD = 1,
@@ -48,14 +48,14 @@ def move(move_item: MoveItem):
     
     match move_item.direction:
         case Direction.FORWARD:
-            stepper.set_motor_speed(stepper.LEFT, on_off)
-            stepper.set_motor_speed(stepper.RIGHT, on_off)
+            ctrler.set_motor_speed(stepper.LEFT, on_off)
+            ctrler.set_motor_speed(stepper.RIGHT, on_off)
         case Direction.RIGHT:
-            stepper.set_motor_speed(stepper.LEFT, on_off)
+            ctrler.set_motor_speed(stepper.LEFT, on_off)
         case Direction.BACK:
-            stepper.set_motor_speed(stepper.LEFT, -on_off)
-            stepper.set_motor_speed(stepper.RIGHT, -on_off)
+            ctrler.set_motor_speed(stepper.LEFT, -on_off)
+            ctrler.set_motor_speed(stepper.RIGHT, -on_off)
         case Direction.LEFT:
-            stepper.set_motor_speed(stepper.RIGHT, on_off)
+            ctrler.set_motor_speed(stepper.RIGHT, on_off)
             
     return {"req": "moved", "parsed": move_item}
