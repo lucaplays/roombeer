@@ -1,7 +1,7 @@
 from typing import Union
 from enum import Enum
 from fastapi import FastAPI
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from motor_ctrl.motor import controller, stepper
 
 from fastapi.middleware.cors import CORSMiddleware
