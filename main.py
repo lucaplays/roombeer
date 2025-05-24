@@ -103,7 +103,6 @@ def move(move_item: MoveItem):
         case Direction.LEFT:
             ctrler.set_motor_speed(-on_off, on_off)
             
-
     return {"req": "moved", "parsed": move_item}
 
 #SPEED CONTROL
