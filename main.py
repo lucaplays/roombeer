@@ -8,7 +8,7 @@ from motor_ctrl.motor import controller, stepper, sonic_sensor_pos
 
 from fastapi.middleware.cors import CORSMiddleware
 
-ctrler = controller(device="/dev/ttyRoom")
+ctrler = controller(device="/dev/ttyACM0")
 
 speed: float = 0.5
 
