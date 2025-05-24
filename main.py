@@ -92,7 +92,6 @@ class MoveItem(BaseModel):
 @app.post("/move/")
 def move(move_item: MoveItem):
     on_off = int(move_item.is_down) * 0.3;
-    
     match move_item.direction:
         case Direction.FORWARD:
             ctrler.set_motor_speed(on_off, on_off)
