@@ -14,6 +14,9 @@ class sonic_sensor_pos(Enum):
     LEFT = 1
     BACK = 2
     RIGHT = 3
+    FRONT_LEFT = 4
+    FRONT_RIGHT = 5
+    LOADED = 6
 
 
 class controller:
@@ -21,6 +24,7 @@ class controller:
     def __init__(self, device: str):
         self.device = device
         self.serial = serial.Serial(device)
+        self.serial = None
         self.speed_left = 0
         self.speed_right = 0
         self.sonic_sensors: dict[sonic_sensor_pos, int] = {}

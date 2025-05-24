@@ -32,7 +32,7 @@ export const commandstore = defineStore('commandstore', {
                 console.log("Failed: " + error)
             }
         },
-        async getSensors(): Promise<Distance> {
+        async getSensors(): Promise<Array<number>> {
             try {
                 const result = await fetch(BASE_URL + "sonicsensors", {
                     method: "GET",
@@ -43,7 +43,7 @@ export const commandstore = defineStore('commandstore', {
 
                 if (result.ok) {
                     const data = await result.json();
-                    return data.sensors;
+                    return data.sensors.map((s:any) => s.distance);
                 } else {
                     console.log(result.status + " " + result.statusText);
                 }
@@ -51,12 +51,7 @@ export const commandstore = defineStore('commandstore', {
                 console.log("Failed: " + error);
             }
 
-            return {
-                distFront: 0,
-                distBack: 0,
-                distLeft: 0,
-                distRight: 0
-            };
+            return [];
         },
         async setSpeed(speed: number) {
             await this.postRequest('speed', {

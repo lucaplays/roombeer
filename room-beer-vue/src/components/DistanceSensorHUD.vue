@@ -3,15 +3,15 @@
         <div class="inner-container">
             <div class="center">
                 <div v-if="loaded">
-                    <img src="../assets/leberkas.png" alt="">
+                    <img class="img" src="../assets/leberkas.png" alt="">
                 </div>
             </div>
-            <div class="sensor h front-left"></div>
-            <div class="sensor h front-middle"></div>
-            <div class="sensor h front-right"></div>
-            <div class="sensor v right"></div>
-            <div class="sensor h back"></div>
-            <div class="sensor v left"></div>
+            <div :style="top = (sensorData[4]/3200)+'%'" class="sensor h front-left"></div>
+            <div :style="top = (sensorData[0]/3200)+'%'"  class="sensor h front-middle"></div>
+            <div :style="top = (sensorData[5]/3200)+'%'"  class="sensor h front-right"></div>
+            <div :style="top = (sensorData[3]/3200)+'%'"  class="sensor v right"></div>
+            <div :style="top = (sensorData[2]/3200)+'%'"  class="sensor h back"></div>
+            <div :style="top = (sensorData[1]/3200)+'%'"  class="sensor v left"></div>
         </div>
     </div>
 </template>
@@ -36,9 +36,9 @@ onUnmounted(() => {
 })
 
 async function updateSensorValues() {
-    await cmdStore.getSensors().then(({sensorData, isLoaded }) => {
+    await cmdStore.getSensors().then((sensorData) => {
+        loaded.value = sensorData.pop();
         sensorData.value = sensorData;
-        loaded.value = isLoaded
     });
 }
 
@@ -63,6 +63,8 @@ async function updateSensorValues() {
 
 .center {
     position: absolute;
+    display: flex;
+    justify-items: center;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -70,6 +72,11 @@ async function updateSensorValues() {
     border-radius: 7px;
     width: 40%;
     height: 40%;
+}
+
+.img {
+    display: block;
+    width: 100%;
 }
 
 .sensor {

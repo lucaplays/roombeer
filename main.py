@@ -8,7 +8,7 @@ from motor_ctrl.motor import controller, stepper, sonic_sensor_pos
 
 from fastapi.middleware.cors import CORSMiddleware
 
-ctrler = controller(device="/dev/ttyACM0")
+ctrler = controller(device="/dev/ttyRoom")
 
 speed: float = 0.5
 
@@ -17,6 +17,9 @@ class Direction(int, Enum):
     RIGHT = 2,
     BACK = 3,
     LEFT = 4,
+    FORWARD_LEFT = 5,
+    FORWARD_RIGHT = 6,
+    LOADED = 7,
 
 
 app = FastAPI()
@@ -50,19 +53,47 @@ async def startup_event():
 def read_root():
     return {"Hello": "World"}
 
+class sonicDistanceItem:
+    direction: Direction
+    distance: int
 
-class SonicSensors:
-    sensors: list[int]
-    is_loaded: bool
+    def __init__(self, direction: Direction, distance: int):
+        self.direction = direction
+        self.distance = distance
+
+    def toMap(self):
+        return {
+            "direction": self.direction,
+            "distance": self.distance,
+        }
 
 
 @app.get("/sonicsensors/")
-def sonic_sensors(sensors: SonicSensors):
+def sonic_sensors():
     return {
-        "res": {
-            "sensors": sensors.sensors,
-            "isLoaded": sensors.is_loaded
-        }
+        "res": [
+            sonicDistanceItem(
+                direction=Direction.FORWARD, distance=ctrler.sonic_sensors[sonic_sensor_pos.FRONT.value]
+            ).toMap(),
+            sonicDistanceItem(
+                direction=Direction.RIGHT, distance=ctrler.sonic_sensors[sonic_sensor_pos.RIGHT.value]
+            ).toMap(),
+            sonicDistanceItem(
+                direction=Direction.BACK, distance=ctrler.sonic_sensors[sonic_sensor_pos.BACK.value]
+            ).toMap(),
+            sonicDistanceItem(
+                direction=Direction.LEFT, distance=ctrler.sonic_sensors[sonic_sensor_pos.LEFT.value]
+            ).toMap(),
+            sonicDistanceItem(
+                direction=Direction.FORWARD_LEFT, distance=ctrler.sonic_sensors[sonic_sensor_pos.FRONT_LEFT.value]
+            ).toMap(),
+            sonicDistanceItem(
+                direction=Direction.FORWARD_RIGHT, distance=ctrler.sonic_sensors[sonic_sensor_pos.FRONT_RIGHT.value]
+            ).toMap(),
+            sonicDistanceItem(
+                direction=Direction.LOADED, distance=ctrler.sonic_sensors[sonic_sensor_pos.LOADED.value]
+            ).toMap(),
+        ]
     }
 
 class MoveItem(BaseModel):
