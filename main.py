@@ -104,3 +104,10 @@ def move(move_item: MoveItem):
             ctrler.set_motor_speed(-on_off, on_off)
             
     return {"req": "moved", "parsed": move_item}
+
+#SPEED CONTROL
+@app.post("/speed/")
+def move(speed: float):
+    ctrler.speed_left = speed
+    ctrler.speed_right = speed
+    return {"req": "speed", "parsed": speed}
