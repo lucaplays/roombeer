@@ -10,6 +10,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 ctrler = controller(device="/dev/ttyACM0")
 
+speed: float = 0.5
+
 class Direction(int, Enum):
     FORWARD = 1,
     RIGHT = 2,
@@ -89,10 +91,11 @@ class MoveItem(BaseModel):
     is_down: bool = Field(..., alias="isDown")
 
 
+
 @app.post("/move/")
 def move(move_item: MoveItem):
 
-    on_off = int(move_item.is_down) * 0.1;
+    on_off = int(move_item.is_down) * speed
     match move_item.direction:
         case Direction.FORWARD:
             ctrler.set_motor_speed(on_off, on_off)
@@ -106,11 +109,11 @@ def move(move_item: MoveItem):
     return {"req": "moved", "parsed": move_item}
 
 class SpeedItem(BaseModel):
-    value: float
+    speed: float
 
 #SPEED CONTROL
 @app.post("/speed/")
 def move(item: SpeedItem):
-    ctrler.speed_left = item.value
-    ctrler.speed_right = item.value
+    global speed
+    speed = item.speed    
     return {"req": item}
