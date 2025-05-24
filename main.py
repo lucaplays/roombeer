@@ -48,14 +48,12 @@ def move(move_item: MoveItem):
     
     match move_item.direction:
         case Direction.FORWARD:
-            ctrler.set_motor_speed(stepper.LEFT, on_off)
-            ctrler.set_motor_speed(stepper.RIGHT, on_off)
+            ctrler.set_motor_speed(on_off, on_off)
         case Direction.RIGHT:
-            ctrler.set_motor_speed(stepper.LEFT, on_off)
+            ctrler.set_motor_speed(on_off, 0)
         case Direction.BACK:
-            ctrler.set_motor_speed(stepper.LEFT, -on_off)
-            ctrler.set_motor_speed(stepper.RIGHT, -on_off)
+            ctrler.set_motor_speed(-on_off, -on_off)
         case Direction.LEFT:
-            ctrler.set_motor_speed(stepper.RIGHT, on_off)
+            ctrler.set_motor_speed(0, on_off)
             
     return {"req": "moved", "parsed": move_item}

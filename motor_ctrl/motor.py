@@ -36,13 +36,9 @@ class controller:
 
         os.write(self.fd, bytes(buffer))
 
-    def set_motor_speed(self, ste: stepper, speed_float: float):
-        speed = int(speed_float * 4000)
-
-        if ste == stepper.RIGHT:
-            self.speed_right = speed
-        else:
-            self.speed_left = speed
+    def set_motor_speed(self, left_speed_float: float, right_speed_float: float):
+        self.speed_left = int(left_speed_float * 4000)
+        self.speed_right = int(right_speed_float * 4000)
 
         self.__push_speed()
 
