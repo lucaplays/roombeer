@@ -1,17 +1,17 @@
 <template>
   <videoFrame />
   <div class="radial-buttons">
-    <button id="topBtn" @mousedown="(evt)=> handleInput(evt, Direction.FORWARD)" @mouseup="(evt)=> handleInput(evt, Direction.FORWARD)" class="button top">
+    <button id="topBtn" :class="{active: inputPressed[0]}" @mousedown="(evt)=> handleInput(evt, Direction.FORWARD)" @mouseup="(evt)=> handleInput(evt, Direction.FORWARD)" class="button top">
       {{ "^" }}
     </button>
-    <button id="leftBtn" @mousedown="(evt)=> handleInput(evt, Direction.LEFT)" @mouseup="(evt)=> handleInput(evt, Direction.LEFT)" class="button left">
-      {{ "<" }}
-    </button>
-    <button id="downBtn" @mousedown="(evt)=> handleInput(evt, Direction.BACK)" @mouseup="(evt)=> handleInput(evt, Direction.BACK)" class="button bottom">
-      {{ "v" }}
-    </button>
-    <button id="rightBtn" @mousedown="(evt)=> handleInput(evt, Direction.RIGHT)" @mouseup="(evt)=> handleInput(evt, Direction.RIGHT)" class="button right">
+    <button id="rightBtn" :class="{active: inputPressed[1]}" @mousedown="(evt)=> handleInput(evt, Direction.RIGHT)" @mouseup="(evt)=> handleInput(evt, Direction.RIGHT)" class="button right">
       {{ ">" }}
+    </button>
+    <button id="downBtn" :class="{active: inputPressed[2]}" @mousedown="(evt)=> handleInput(evt, Direction.BACK)" @mouseup="(evt)=> handleInput(evt, Direction.BACK)" class="button bottom">
+    {{ "v" }}
+    </button>
+    <button id="leftBtn" :class="{active: inputPressed[3]}" @mousedown="(evt)=> handleInput(evt, Direction.LEFT)" @mouseup="(evt)=> handleInput(evt, Direction.LEFT)" class="button left">
+      {{ "<" }}
     </button>
   </div>
 </template>
@@ -20,11 +20,13 @@
 import videoFrame from "@/components/IFrame.vue";
 import { Direction } from "@/constants";
 import { commandstore } from '@/stores/commandstore';
-import { onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
+const inputPressed = ref<boolean[]>([false, false, false, false])
 const cmdStore = commandstore();
 
 function handleInput(event: KeyboardEvent | MouseEvent, direction: Direction = Direction.NONE) {
+  const isDown = event.type.includes('down');
 
   if(event instanceof KeyboardEvent) {
     switch(event.key) {
@@ -40,16 +42,21 @@ function handleInput(event: KeyboardEvent | MouseEvent, direction: Direction = D
       case 'a':
         direction = Direction.LEFT;
         break;
+    }
   }
-}
 
-  console.log(direction);
 
   if (direction === Direction.NONE){
     return
   }
-  
-  const isDown = event.type.includes('down');
+
+  if(isDown && inputPressed.value[direction - 1]){
+    return;
+  }
+
+  console.log(direction, isDown);
+
+  inputPressed.value[direction - 1] = isDown;
 
   cmdStore.move(direction, isDown);
 }
@@ -89,6 +96,10 @@ onUnmounted(() => {
   color: white;
   font-size: 20px;
   cursor: pointer;
+}
+
+.button.active {
+  background-color: rgb(135, 190, 249);
 }
 
 .top {
