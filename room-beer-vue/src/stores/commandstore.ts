@@ -34,7 +34,7 @@ export const commandstore = defineStore('commandstore', {
         },
         async getDistances(): Promise<Distance> {
             try {
-                const result = await fetch(BASE_URL + "/sonicdistance/", {
+                const result = await fetch(BASE_URL + "sonicdistance/", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json"

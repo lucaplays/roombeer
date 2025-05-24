@@ -105,9 +105,12 @@ def move(move_item: MoveItem):
             
     return {"req": "moved", "parsed": move_item}
 
+class SpeedItem(BaseModel):
+    value: float
+
 #SPEED CONTROL
 @app.post("/speed/")
-def move(speed: float):
-    ctrler.speed_left = speed
-    ctrler.speed_right = speed
-    return {"req": "speed", "parsed": speed}
+def move(item: SpeedItem):
+    ctrler.speed_left = item.value
+    ctrler.speed_right = item.value
+    return {"req": item}
