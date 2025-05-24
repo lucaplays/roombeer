@@ -32,6 +32,7 @@ class controller:
         controller.__push_int16(buffer, self.speed_right)
         controller.__push_int16(buffer, self.speed_left)
 
+        buffer.append("\n")
         print(bytes(buffer))
         os.write(self.fd, bytes(buffer))
 
