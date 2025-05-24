@@ -44,7 +44,7 @@ class MoveItem(BaseModel):
 
 @app.post("/move/")
 def move(move_item: MoveItem):
-    on_off = int(move_item.is_down);
+    on_off = int(move_item.is_down) * 0.1;
     
     match move_item.direction:
         case Direction.FORWARD:
