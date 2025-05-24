@@ -5,17 +5,25 @@
             <h3>{{ label }}</h3>
             <p>{{ distances[index].toFixed(1) }}</p>
         </div>
+        <button @click="updateDistanceValues">update</button>
     </div>
 </template>
 
 <script setup>
+import { commandstore } from '@/stores/commandstore';
 import { ref } from 'vue';
 
+var cmdStore = commandstore();
 // Labels for the columns
-const labels = ['Front', 'Right', 'Left', 'Back'];
-
+const labels = ['Front', 'Back', 'Left', 'Right'];
 // Distances for each column (0 to 1)
-const distances = ref([1.0, 0.2, 0.5, 0.9]); // Example distances
+var distances = ref([1.0, 0.0, 0.5, 0.9]); // Example distances
+
+async function updateDistanceValues() {
+    await cmdStore.getDistances().then((data) => {
+        distances.value = data;
+    });
+}
 
 // Function to calculate the circle style based on distance
 const circleStyle = (distance) => {
@@ -23,7 +31,7 @@ const circleStyle = (distance) => {
         width: '10px',
         height: '10px',
         borderRadius: '50%',
-        backgroundColor: 'yellow',
+        backgroundColor: 'red',
         position: 'absolute',
         bottom: `${distance * 100}%`, // Position based on distance
         left: '50%',
@@ -39,20 +47,24 @@ const circleStyle = (distance) => {
     display: flex;
     justify-content: space-around;
     align-items: flex-end;
-    height: 250px;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    height: 200px;
+    border-left: 1px solid #ffffff;
+    border-right: 1px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+    background-color: rgba(0, 0, 0, 0.822);
 }
 
 .column {
+
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     text-align: center;
-    height: 100%;
+    height: 90%;
     width: 100px;
+    border-left: 1px solid #ffffff;
+    border-right: 1px solid #ffffff;
 }
 
 .column:not(:last-child)::after {
@@ -62,12 +74,11 @@ const circleStyle = (distance) => {
     right: 0;
     width: 1px;
     height: 100%;
-    background-color: #ccc;
 }
 
 h3 {
     margin: 0;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid #ffffff;
     border-bottom: 1px solid #ccc;
 }
 
