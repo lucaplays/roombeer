@@ -20,6 +20,7 @@ var distances = [0.0, 0.0, 0.0, 0.0]; // Initialize with default values
 
 async function updateDistanceValues() {
     await cmdStore.getDistances().then((data) => {
+        console.log(data)
         distances = [
             data.distFront,
             data.distBack,
