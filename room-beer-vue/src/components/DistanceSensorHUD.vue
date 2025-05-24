@@ -26,6 +26,7 @@ async function updateDistanceValues() {
             data.distLeft,
             data.distRight
         ];
+        circleStyle(distances)
     });
 }
 
