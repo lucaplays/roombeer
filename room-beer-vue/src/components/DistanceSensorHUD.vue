@@ -6,12 +6,12 @@
                     <img class="img" src="../assets/leberkas.png" alt="">
                 </div>
             </div>
-            <div :style="top = (sensorData[4]/3200)+'%'" class="sensor h front-left"></div>
-            <div :style="top = (sensorData[0]/3200)+'%'"  class="sensor h front-middle"></div>
-            <div :style="top = (sensorData[5]/3200)+'%'"  class="sensor h front-right"></div>
-            <div :style="top = (sensorData[3]/3200)+'%'"  class="sensor v right"></div>
-            <div :style="top = (sensorData[2]/3200)+'%'"  class="sensor h back"></div>
-            <div :style="top = (sensorData[1]/3200)+'%'"  class="sensor v left"></div>
+            <div :style="top = (sensorData[4]/(300-120))+'%'" class="sensor h front-left"></div>
+            <div :style="top = (sensorData[0]/(300-120))+'%'"  class="sensor h front-middle"></div>
+            <div :style="top = (sensorData[5]/(300-120))+'%'"  class="sensor h front-right"></div>
+            <div :style="right = (sensorData[3]/(300-120))+'%'"  class="sensor v right"></div>
+            <div :style="bottom = (sensorData[2]/(300-120))+'%'"  class="sensor h back"></div>
+            <div :style="left = (sensorData[1]/(300-120))+'%'"  class="sensor v left"></div>
         </div>
     </div>
 </template>
@@ -37,7 +37,7 @@ onUnmounted(() => {
 
 async function updateSensorValues() {
     await cmdStore.getSensors().then((sensorData) => {
-        loaded.value = sensorData.pop();
+        loaded.value = sensorData.pop() < 40;
         sensorData.value = sensorData;
     });
 }
