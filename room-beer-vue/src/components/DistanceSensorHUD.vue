@@ -1,96 +1,129 @@
 <template>
-    <div class="container">
-        <div class="column" v-for="(label, index) in labels" :key="index">
-            <div class="circle" :style="circleStyle(distances[index])"></div>
-            <h3>{{ label }}</h3>
-            <p>{{ distances[index].toFixed(1) }}</p>
+    <div class="sensor-container">
+        <div class="inner-container">
+            <div class="center">
+                <div v-if="loaded">
+                    <img src="../assets/leberkas.png" alt="">
+                </div>
+            </div>
+            <div class="sensor h front-left"></div>
+            <div class="sensor h front-middle"></div>
+            <div class="sensor h front-right"></div>
+            <div class="sensor v right"></div>
+            <div class="sensor h back"></div>
+            <div class="sensor v left"></div>
         </div>
-        <button @click="updateDistanceValues">update</button>
     </div>
 </template>
 
 <script setup>
+import { onMounted, onUnmounted, ref } from 'vue';
 import { commandstore } from '@/stores/commandstore';
 
-var cmdStore = commandstore();
-// Labels for the columns
-const labels = ['Front', 'Back', 'Left', 'Right'];
-// Distances for each column (0 to 1)
-var distances = [0.0, 0.0, 0.0, 0.0]; // Initialize with default values
+const cmdStore = commandstore();
 
-async function updateDistanceValues() {
-    await cmdStore.getDistances().then((data) => {
-        distances = [
-            data.distFront,
-            data.distBack,
-            data.distLeft,
-            data.distRight
-        ];
+const loaded = ref(true);
+const sensorData = ref([ 0, 0, 0, 0, 0, 0 ]);
+
+let sensorInterval;
+
+onMounted(() => {
+    sensorInterval = setInterval(updateSensorValues, 500);
+})
+
+onUnmounted(() => {
+    clearInterval(sensorInterval);
+})
+
+async function updateSensorValues() {
+    await cmdStore.getSensors().then(({sensorData, isLoaded }) => {
+        sensorData.value = sensorData;
+        loaded.value = isLoaded
     });
 }
 
-// Function to calculate the circle style based on distance
-const circleStyle = (distance) => {
-    return {
-        width: '10px',
-        height: '10px',
-        borderRadius: '50%',
-        backgroundColor: 'red',
-        position: 'absolute',
-        bottom: `${distance * 100}%`, // Position based on distance
-        left: '50%',
-        transform: 'translateX(-50%)', // Center the circle horizontally
-    };
-};
 </script>
 
 <style scoped>
-.container {
-    position: fixed;
-    bottom: 0;
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-end;
-    height: 200px;
-    border-left: 1px solid #ffffff;
-    border-right: 1px solid #ffffff;
-    border-bottom: 1px solid #ffffff;
-    background-color: rgba(0, 0, 0, 0.822);
-}
-
-.column {
-
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    text-align: center;
-    height: 90%;
-    width: 100px;
-    border-left: 1px solid #ffffff;
-    border-right: 1px solid #ffffff;
-}
-
-.column:not(:last-child)::after {
-    content: '';
+.sensor-container {
     position: absolute;
-    top: 0;
-    right: 0;
-    width: 1px;
+    left: 0;
+    bottom: 0;
+    height: 300px;
+    width: 400px;
+    background-color: rgba(50, 50, 50, 0.5);
+    padding: 10px 15px;
+}
+
+.inner-container {
+    position: relative;
+    width: 100%;
     height: 100%;
 }
 
-h3 {
-    margin: 0;
-    border-top: 1px solid #ffffff;
-    border-bottom: 1px solid #ccc;
+.center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: lightslategray;
+    border-radius: 7px;
+    width: 40%;
+    height: 40%;
 }
 
-p {
-    margin: 0;
+.sensor {
+    position: absolute;
+    background-color: yellow;
 }
 
-.circle {
-    transition: bottom 0.3s;
+.sensor.v {
+    width: 2px;
+}
+
+.sensor.h {
+    height: 2px;
+}
+
+.front-left {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: calc(100% / 3);
+}
+
+.front-middle {
+    position: absolute;
+    left: calc(100% / 3);
+    top: 0;
+    width: calc(100% / 3);
+}
+
+.front-right {
+    position: absolute;
+    left: calc(100% / 3 * 2);
+    top: 0;
+    width: calc(100% / 3);
+}
+
+.back {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.left {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+}
+
+.right {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
 }
 </style>

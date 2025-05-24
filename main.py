@@ -51,40 +51,19 @@ def read_root():
     return {"Hello": "World"}
 
 
-class sonicDistanceItem:
-    direction: Direction
-    distance: int
-
-    def __init__(self, direction: Direction, distance: int):
-        self.direction = direction
-        self.distance = distance
-
-    def toMap(self):
-        return {
-            "direction": self.direction,
-            "distance": self.distance,
-        }
+class SonicSensors:
+    sensors: list[int]
+    is_loaded: bool
 
 
-@app.get("/sonicdistance/")
-def sonic_distance():
+@app.get("/sonicsensors/")
+def sonic_sensors(sensors: SonicSensors):
     return {
-        "res": [
-            sonicDistanceItem(
-                direction=Direction.FORWARD, distance=ctrler.sonic_sensors[sonic_sensor_pos.FRONT.value]
-            ).toMap(),
-            sonicDistanceItem(
-                direction=Direction.RIGHT, distance=ctrler.sonic_sensors[sonic_sensor_pos.RIGHT.value]
-            ).toMap(),
-            sonicDistanceItem(
-                direction=Direction.BACK, distance=ctrler.sonic_sensors[sonic_sensor_pos.BACK.value]
-            ).toMap(),
-            sonicDistanceItem(
-                direction=Direction.LEFT, distance=ctrler.sonic_sensors[sonic_sensor_pos.LEFT.value]
-            ).toMap(),
-        ]
+        "res": {
+            "sensors": sensors.sensors,
+            "isLoaded": sensors.is_loaded
+        }
     }
-
 
 class MoveItem(BaseModel):
     direction: Direction
