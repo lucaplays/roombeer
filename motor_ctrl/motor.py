@@ -49,29 +49,9 @@ class controller:
 
         os.write(self.fd, bytes(buffer))
 
-<<<<<<< HEAD
     def set_motor_speed(self, left_speed_float: float, right_speed_float: float):
         self.speed_left = int(left_speed_float * 4000)
         self.speed_right = int(right_speed_float * 4000)
-=======
-    def handle_rx(self):
-        buffer = os.read(self.fd, 10)
-
-        if buffer[0] != 0xAA:
-            return
-
-        value_cnt = buffer[1]
-        for i in range(value_cnt):
-            self.sonic_sensors[i] = controller.__pull_int16([buffer[2 + i * 2], buffer[2 + i * 2 + 1]])
-
-    def set_motor_speed(self, ste: stepper, speed_float: float):
-        speed = int(speed_float * 4000)
-
-        if ste == stepper.RIGHT:
-            self.speed_right = speed
-        else:
-            self.speed_left = speed
->>>>>>> 7b34384 (ctrl: sonic distance)
 
         self.__push_speed()
 
