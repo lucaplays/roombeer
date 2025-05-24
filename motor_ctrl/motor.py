@@ -60,7 +60,7 @@ class controller:
         self.speed_right = int(right_speed_float * 1600)
 
     def handle_rx(self):
-        buffer = os.read(self.fd, 10)
+        buffer = self.serial.read(16)
 
         if buffer[0] != 0xAA:
             return
