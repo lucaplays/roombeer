@@ -52,6 +52,10 @@ class controller:
     def set_motor_speed(self, left_speed_float: float, right_speed_float: float):
         self.speed_left = int(left_speed_float * 4000)
         self.speed_right = int(right_speed_float * 4000)
+        print('left')
+        print(self.speed_left)
+        print('right')
+        print(self.speed_right)
 
         self.__push_speed()
 
