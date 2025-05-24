@@ -30,10 +30,6 @@ class controller:
         controller.__push_int16(buffer, self.speed_right)
         controller.__push_int16(buffer, self.speed_left)
 
-        # left motor
-        buffer.append(self.speed_left & 0xFF)
-        buffer.append((self.speed_left & 0xFF00) >> 8)
-
         os.write(self.fd, bytes(buffer))
 
     def set_motor_speed(self, left_speed_float: float, right_speed_float: float):
