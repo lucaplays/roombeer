@@ -16,11 +16,16 @@ var cmdStore = commandstore();
 // Labels for the columns
 const labels = ['Front', 'Back', 'Left', 'Right'];
 // Distances for each column (0 to 1)
-var distances = [1.0, 0.0, 0.0, 0.0]; // Example distances
+var distances = [0.0, 0.0, 0.0, 0.0]; // Initialize with default values
 
 async function updateDistanceValues() {
     await cmdStore.getDistances().then((data) => {
-        distances.value = data;
+        distances = [
+            data.distFront,
+            data.distBack,
+            data.distLeft,
+            data.distRight
+        ];
     });
 }
 

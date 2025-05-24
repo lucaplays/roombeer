@@ -11,9 +11,7 @@ interface Distance {
 }
 
 export const commandstore = defineStore('commandstore', {
-    state: () => ({
-
-    }),
+    state: () => ({}),
     actions: {
         async postRequest(path: string, body: object) {
             console.log(body)
@@ -64,6 +62,11 @@ export const commandstore = defineStore('commandstore', {
                 distLeft: 0,
                 distRight: 0
             };
+        },
+        async setSpeed(speed: number) {
+            await this.postRequest('speed', {
+                speed
+            })
         },
         async move(direction: Direction, isDown: boolean) {
             await this.postRequest('move', {
