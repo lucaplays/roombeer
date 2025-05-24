@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 stepper = controller(device="/dev/ttyACM0")
 
-class Direction(Enum):
+class Direction(int, Enum):
     FORWARD = 1,
     RIGHT = 2,
     BACK = 3,
