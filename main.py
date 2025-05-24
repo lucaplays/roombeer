@@ -91,13 +91,8 @@ class MoveItem(BaseModel):
 
 @app.post("/move/")
 def move(move_item: MoveItem):
-<<<<<<< HEAD
     on_off = int(move_item.is_down) * 0.6;
     
-=======
-    on_off = int(move_item.is_down) * 0.1;
-
->>>>>>> 7b34384 (ctrl: sonic distance)
     match move_item.direction:
         case Direction.FORWARD:
             ctrler.set_motor_speed(on_off, on_off)
@@ -106,11 +101,6 @@ def move(move_item: MoveItem):
         case Direction.BACK:
             ctrler.set_motor_speed(-on_off, -on_off)
         case Direction.LEFT:
-<<<<<<< HEAD
             ctrler.set_motor_speed(-on_off, on_off)
             
-=======
-            ctrler.set_motor_speed(stepper.RIGHT, on_off)
-
->>>>>>> 7b34384 (ctrl: sonic distance)
     return {"req": "moved", "parsed": move_item}
