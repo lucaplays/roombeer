@@ -17,12 +17,13 @@
       @mouseup="(evt) => handleInput(evt, Direction.LEFT)" class="button left">
       {{ "<" }} </button>
   </div>
-
   <videoFrame />
+  <sensorHud />
 </template>
 
 <script lang="ts" setup>
 import videoFrame from "@/components/IFrame.vue";
+import sensorHud from "@/components/DistanceSensorHUD.vue";
 import { Direction } from "@/constants";
 import { commandstore } from '@/stores/commandstore';
 import { ref, onMounted, onUnmounted } from 'vue';
