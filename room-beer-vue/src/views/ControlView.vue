@@ -23,7 +23,6 @@ import { commandstore } from '@/stores/commandstore';
 import { onMounted, onUnmounted } from 'vue';
 
 const cmdStore = commandstore();
-const keysPressed: { [key: string]: boolean } = {};
 
 function handleInput(event: KeyboardEvent | MouseEvent, direction: Direction = Direction.NONE) {
 
@@ -39,9 +38,16 @@ function handleInput(event: KeyboardEvent | MouseEvent, direction: Direction = D
         direction = Direction.BACK;
         break;
       case 'a':
-        direction = Direction.RIGHT;
+        direction = Direction.LEFT;
         break;
-    }}
+  }
+}
+
+  console.log(direction);
+
+  if (direction === Direction.NONE){
+    return
+  }
   
   const isDown = event.type.includes('down');
 
@@ -51,25 +57,11 @@ function handleInput(event: KeyboardEvent | MouseEvent, direction: Direction = D
 onMounted(() => {
   window.addEventListener('keydown', handleInput);
   window.addEventListener('keyup', handleInput);
-})
+});
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleInput);
   window.removeEventListener('keyup', handleInput);
-})
-
-document.addEventListener('keydown', (event: KeyboardEvent) => {
-  const key = event.key.toLowerCase();
-  if (['w', 'a', 's', 'd'].includes(key) && !keysPressed[key]) {
-    keysPressed[key] = true;
-  }
-});
-
-document.addEventListener('keyup', (event: KeyboardEvent) => {
-  const key = event.key.toLowerCase();
-  if (['w', 'a', 's', 'd'].includes(key) && keysPressed[key]) {
-    keysPressed[key] = false;
-  }
 });
 
 </script>

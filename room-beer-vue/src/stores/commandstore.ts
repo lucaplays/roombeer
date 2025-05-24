@@ -9,9 +9,13 @@ export const commandstore = defineStore('commandstore', {
     }),
     actions: {
         async postRequest(path: string, body: object) {
+            console.log(body)
             try {
                 const result = await fetch(BASE_URL + path, {
                     method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
                     body: JSON.stringify(body)
                 })
                 if (result.ok) {
