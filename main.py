@@ -25,17 +25,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 class Item(BaseModel):
     name: str
     price: float
     is_offer: Union[bool, None] = None
 
-
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
 
+class sonicDistanceItem(BaseModel):
+    direction: Direction
+    distance: int
+
+@app.get("/sonicdistance/")
+def sonic_distance(sonic_distance_item: sonicDistanceItem):
+    return {"res": sonic_distance_item}
 
 class MoveItem(BaseModel):
     direction: Direction
