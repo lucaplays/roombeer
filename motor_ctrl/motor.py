@@ -24,7 +24,6 @@ class controller:
     def __init__(self, device: str):
         self.device = device
         self.serial = serial.Serial(device)
-        self.serial = None
         self.speed_left = 0
         self.speed_right = 0
         self.sonic_sensors: dict[sonic_sensor_pos, int] = {}
