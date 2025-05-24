@@ -43,7 +43,7 @@ export const commandstore = defineStore('commandstore', {
 
                 if (result.ok) {
                     const data = await result.json();
-                    return data.sensors.map((s:any) => s.distance);
+                    return data.map((s:any) => s.distance);
                 } else {
                     console.log(result.status + " " + result.statusText);
                 }
