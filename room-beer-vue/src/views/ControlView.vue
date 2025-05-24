@@ -19,9 +19,11 @@
   </div>
   <videoFrame />
   <sensorHud />
+  <speedSlider />
 </template>
 
 <script lang="ts" setup>
+import speedSlider from "@/components/SpeedSlider.vue";
 import videoFrame from "@/components/IFrame.vue";
 import sensorHud from "@/components/DistanceSensorHUD.vue";
 import { Direction } from "@/constants";

@@ -56,10 +56,19 @@ class controller:
         self.serial.flush()
 
     def set_motor_speed(self, left_speed_float: float, right_speed_float: float):
-        self.speed_left = int(left_speed_float * 4000)
-        self.speed_right = int(right_speed_float * 4000)
-
+        self.speed_left = int(left_speed_float * 1600)
+        self.speed_right = int(right_speed_float * 1600)
         self.__push_speed()
+
+    def handle_rx(self):
+        buffer = self.serial.read(16)
+
+        if buffer[0] != 0xAA:
+            return
+
+        value_cnt = buffer[1]
+        for i in range(value_cnt):
+            self.sonic_sensors[i] = controller.__pull_int16([buffer[2 + i * 2], buffer[2 + i * 2 + 1]]) 
 
 
 # c = controller("/dev/ttyACM0")
