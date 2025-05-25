@@ -6,29 +6,51 @@
                     <img class="img" src="../assets/leberkas.png" alt="">
                 </div>
             </div>
-            <div :style="top = (sensorData[4]/(300-120))+'%'" class="sensor h front-left"></div>
-            <div :style="top = (sensorData[0]/(300-120))+'%'"  class="sensor h front-middle"></div>
-            <div :style="top = (sensorData[5]/(300-120))+'%'"  class="sensor h front-right"></div>
-            <div :style="right = (sensorData[3]/(300-120))+'%'"  class="sensor v right"></div>
-            <div :style="bottom = (sensorData[2]/(300-120))+'%'"  class="sensor h back"></div>
-            <div :style="left = (sensorData[1]/(300-120))+'%'"  class="sensor v left"></div>
+            <div :style="{top: getPosition(sensorData[4]) +'%',
+             left: getDistanceToEdge(sensorData[4])  + '%'}" 
+             class="sensor h front-left"></div>
+            <div :style="{top: getPosition(sensorData[0]) +'%'}"
+              class="sensor h front-middle"></div>
+            <div :style="{top: getPosition(sensorData[5]) +'%',
+             right: getDistanceToEdge(sensorData[5]) + '%'}" 
+              class="sensor h front-right"></div>
+            <div :style="{right: getPosition(sensorData[3]) +'%',
+             top: getDistanceToEdge(sensorData[3]) + '%',
+             bottom: getDistanceToEdge(sensorData[3]) + '%'}" 
+              class="sensor v right"></div>
+            <div :style="{bottom: getPosition(sensorData[2]) +'%',
+             left: getDistanceToEdge(sensorData[3]) + '%',
+             right: getDistanceToEdge(sensorData[3]) + '%'}" 
+              class="sensor h back"></div>
+            <div :style="{left: getPosition(sensorData[1]) +'%',
+             top: getDistanceToEdge(sensorData[3]) + '%',
+             bottom: getDistanceToEdge(sensorData[3]) + '%'}" 
+              class="sensor v left"></div>
         </div>
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
 import { commandstore } from '@/stores/commandstore';
 
 const cmdStore = commandstore();
 
-const loaded = ref(true);
-const sensorData = ref([ 0, 0, 0, 0, 0, 0 ]);
+const loaded = ref(false);
+const sensorData = ref<number[]>([ 0, 0, 0, 0, 0, 0 ]);
 
-let sensorInterval;
+let sensorInterval:number;
+
+function getPosition(value: number){
+    return (1 - (value / 3200)) * 30;
+}
+
+function getDistanceToEdge(value:number){
+    return (1 - value / 3200) * 30
+}
 
 onMounted(() => {
-    sensorInterval = setInterval(updateSensorValues, 500);
+    sensorInterval = setInterval(updateSensorValues, 100);
 })
 
 onUnmounted(() => {
@@ -36,9 +58,10 @@ onUnmounted(() => {
 })
 
 async function updateSensorValues() {
-    await cmdStore.getSensors().then((sensorData) => {
-        loaded.value = sensorData.pop() < 40;
-        sensorData.value = sensorData;
+    await cmdStore.getSensors().then((sData:Array<number> = []) => {
+        const isLoaded = sData.pop()
+        loaded.value = isLoaded == undefined ? false : isLoaded < 100;
+        sensorData.value = sData;
     });
 }
 
@@ -95,42 +118,42 @@ async function updateSensorValues() {
 .front-left {
     position: absolute;
     left: 0;
+    right: 70%;
     top: 0;
-    width: calc(100% / 3);
 }
 
 .front-middle {
     position: absolute;
-    left: calc(100% / 3);
+    left: 30%;
+    right: 30%;
     top: 0;
-    width: calc(100% / 3);
 }
 
 .front-right {
     position: absolute;
-    left: calc(100% / 3 * 2);
+    left: 70%;
+    right: 0;
     top: 0;
-    width: calc(100% / 3);
 }
 
 .back {
     position: absolute;
     left: 0;
+    right: 0;
     bottom: 0;
-    width: 100%;
 }
 
 .left {
     position: absolute;
     left: 0;
     top: 0;
-    height: 100%;
+    bottom: 0;
 }
 
 .right {
     position: absolute;
     right: 0;
     top: 0;
-    height: 100%;
+    bottom: 0;
 }
 </style>
